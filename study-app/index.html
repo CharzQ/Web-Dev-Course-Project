@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Study Tracker</title>
+  <script src="https://unpkg.com/vue@3"></script>
+</head>
+<body>
+
+<div id="app">
+  <h1>Study Sessions</h1>
+
+  <!-- FORM -->
+  <form @submit.prevent="addSession">
+    <input v-model="newSession.subject" placeholder="Subject" required />
+    <input v-model.number="newSession.duration" type="number" placeholder="Duration (mins)" required />
+    <input v-model.number="newSession.productivity" type="number" min="1" max="5" placeholder="Productivity (1-5)" required />
+    <input v-model="newSession.date" type="date" required />
+    <button type="submit">Add Session</button>
+  </form>
+
+  <hr />
+
+  <!-- DISPLAY SESSIONS -->
+  <div v-for="session in sessions" :key="session.id">
+    {{ session.subject }} - {{ session.duration }} mins ({{ session.productivity }}/5)
+  </div>
+</div>
+
+<script>
+const { createApp } = Vue;
+
+createApp({
+  data() {
+    return {
+      sessions: [],
+      newSession: {
+        subject: '',
+        duration: null,
+        productivity: null,
+        date: ''
+      }
+    };
+  },
+
+  methods: {
+    async fetchSessions() {
+      const res = await fetch('http://localhost:3000/api/sessions');
+      this.sessions = await res.json();
+    },
+
+    async addSession() {
+      await fetch('http://localhost:3000/api/sessions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(this.newSession)
+      });
+
+      // Clear form
+      this.newSession = {
+        subject: '',
+        duration: null,
+        productivity: null,
+        date: ''
+      };
+
+      // Refresh list
+      this.fetchSessions();
+    }
+  },
+
+  mounted() {
+    this.fetchSessions();
+  }
+}).mount('#app');
+</script>
+
+</body>
+</html>
