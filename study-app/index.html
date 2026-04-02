@@ -23,6 +23,8 @@
   <!-- DISPLAY SESSIONS -->
   <div v-for="session in sessions" :key="session.id">
     {{ session.subject }} - {{ session.duration }} mins ({{ session.productivity }}/5)
+
+    <button @click="deleteSession(session.id)">Delete</button>
   </div>
 </div>
 
@@ -65,6 +67,19 @@ createApp({
 
       // Refresh list
       this.fetchSessions();
+    },
+
+    async deleteSession(id) {
+      try {
+        await fetch(`http://localhost:3000/api/sessions/${id}`, {
+        method: 'DELETE',
+      });
+
+      // Refresh list after deletion
+      this.fetchSessions();
+      } catch(err) {
+        console.error("Delete failed:", err);
+      }
     }
   },
 

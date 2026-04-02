@@ -11,7 +11,8 @@ app.use(cors());
 let sessions = [];
 
 app.get('/api/sessions', (req, res) => {
-  res.json(sessions);
+  res.setHeader('Content-Type', 'application/json');
+  res.send(JSON.stringify(sessions, null, 2));
 });
 
 app.post('/api/sessions', (req, res) => {
