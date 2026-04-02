@@ -13,7 +13,7 @@
     ```
 
 3. **Open the app in your browser**  
-    Visit: http://localhost:3000/api/sessions
+    - Visit: http://localhost:3000/api/sessions
 
 4. **Open the frontend**
     - Locate and open `index.html` in your browser
