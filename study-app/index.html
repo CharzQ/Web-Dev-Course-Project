@@ -3,89 +3,73 @@
 <head>
   <title>Study Tracker</title>
   <script src="https://unpkg.com/vue@3"></script>
-<script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
   <script src="handle_data.js"></script>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
-<div id="app">
-
-  <!-- FORM -->
-  <form @submit.prevent="addSession" id="user_subject_data">
-    <input name="subject" v-model="newSession.subject" placeholder="Subject" required />
-    <input name="duration" v-model.number="newSession.duration" type="number" placeholder="Duration (mins)" required />
-    <input name="productivity" v-model.number="newSession.productivity" type="number" min="1" max="5" placeholder="Productivity (1-5)" required />
-    <input name="date" v-model="newSession.date" type="date" required />
-    <input name="additional_notes" id="additional-notes" type="text" placeholder="Additional Notes">
-    <button id="session-button" type="submit">Add Session</button>
-  </form>
-
-  <hr />
-
-<div id="chart-container"></div>
-
-  <!-- DISPLAY SESSIONS -->
-  <div v-for="session in sessions" :key="session.id">
-    {{ session.subject }} - {{ session.duration }} mins ({{ session.productivity }}/5)
-
-    <button @click="deleteSession(session.id)">Delete</button>
-  <!-- NAVBAR -->
-  <div class="topnav">
-    <a href="#" @click.prevent="currentPage = 'home'" :class="{ active: currentPage === 'home'}">Home</a>
-    <!-- <a href="#" @click.prevent="currentPage = 'analytics'" :class="{ active: currentPage === 'analytics'}">Analytics</a> -->
-    <!-- <a href="#" @click.prevent="currentPage = 'stats'" :class="{ active: currentPage === 'stats'}">Stats</a> -->
-    <a href="#" @click.prevent="currentPage = 'calendar'" :class="{ active: currentPage === 'calendar'}">Calendar</a>
-    <!-- <a href="#" @click.prevent="currentPage = 'API'" :class="{ active: currentPage === 'API'}">API</a> -->
-  </div>
-
-
-  <div v-if="currentPage === 'home'">
-    <h1 id="title">Study Sessions</h1>
-
-    <!-- FORM -->
-    <form @submit.prevent="addSession">
-      <input v-model="newSession.subject" placeholder="Subject" required />
-      <input v-model.number="newSession.duration" type="number" placeholder="Duration (mins)" required />
-      <input v-model.number="newSession.productivity" type="number" min="1" max="5" placeholder="Productivity (1-5)" required />
-      <input v-model="newSession.date" type="date" required />
-      <button id="session-button" type="submit">Add Session</button>
-    </form>
-
-    <hr />
-
-    <!-- DISPLAY SESSIONS -->
-    <div v-for="session in sessions" :key="session.id">
-      {{ session.subject }} - {{ session.duration }} mins ({{ session.productivity }}/5)
-
-      <button @click="deleteSession(session.id)">Delete</button>
-    </div>
-  </div>
-
-  <!-- Calendar Page -->
-  <div v-if="currentPage === 'calendar'">
-    <h1 id="title">Calendar</h1>
-    <div class="calendar-header">
-      <button @click="prevMonth">← Prev</button>
-      
-      <span class="month-title">
-        {{ monthName }} {{ currentYear }}
-      </span>
-      
-      <button @click="nextMonth">Next →</button>
+  <div id="app">
+    <!-- NAVBAR -->
+    <div class="topnav">
+      <a href="#" @click.prevent="currentPage = 'home'" :class="{ active: currentPage === 'home'}">Home</a>
+      <!-- <a href="#" @click.prevent="currentPage = 'analytics'" :class="{ active: currentPage === 'analytics'}">Analytics</a> -->
+      <!-- <a href="#" @click.prevent="currentPage = 'stats'" :class="{ active: currentPage === 'stats'}">Stats</a> -->
+      <a href="#" @click.prevent="currentPage = 'calendar'" :class="{ active: currentPage === 'calendar'}">Calendar</a>
+      <!-- <a href="#" @click.prevent="currentPage = 'API'" :class="{ active: currentPage === 'API'}">API</a> -->
     </div>
 
-    <button class="today-btn" @click="goToToday">Today</button>
 
-    <div class="calendar">
-      <div v-for="day in days" :key="day" :class="['day', { active: hasSession(day), selected: day === selectedDay}]" @click="selectDay(day)">
-        {{ day }}
+    <div v-if="currentPage === 'home'">
+      <h1 id="title">Study Sessions</h1>
+
+      <!-- FORM -->
+      <form @submit.prevent="addSession" id="user_subject_data">
+        <input name="subject" v-model="newSession.subject" placeholder="Subject" required />
+        <input name="duration" v-model.number="newSession.duration" type="number" placeholder="Duration (mins)" required />
+        <input name="productivity" v-model.number="newSession.productivity" type="number" min="1" max="5" placeholder="Productivity (1-5)" required />
+        <input name="date" v-model="newSession.date" type="date" required />
+        <input name="additional_notes" id="additional-notes" type="text" placeholder="Additional Notes">
+        <button id="session-button" type="submit">Add Session</button>
+      </form>
+
+      
+      <hr />
+      
+      <!-- DISPLAY SESSIONS -->
+      <div v-for="session in sessions" :key="session.id">
+        {{ session.subject }} - {{ session.duration }} mins ({{ session.productivity }}/5)
+        
+        <button @click="deleteSession(session.id)">Delete</button>
       </div>
+      <hr />
+      <div id="chart-container"></div>
     </div>
 
-    <h3 v-if="selectedDay">Sessions for Day {{ selectedDay }}</h3>
-    <div v-for="s in filteredSessions" :key="s.id">
-      {{ s.subject }} - {{ s.duration }} mins
+    <!-- Calendar Page -->
+    <div v-if="currentPage === 'calendar'">
+      <h1 id="title">Calendar</h1>
+      <div class="calendar-header">
+        <button @click="prevMonth">← Prev</button>
+        
+        <span class="month-title">
+          {{ monthName }} {{ currentYear }}
+        </span>
+        
+        <button @click="nextMonth">Next →</button>
+      </div>
+
+      <button class="today-btn" @click="goToToday">Today</button>
+
+      <div class="calendar">
+        <div v-for="day in days" :key="day" :class="['day', { active: hasSession(day), selected: day === selectedDay}]" @click="selectDay(day)">
+          {{ day }}
+        </div>
+      </div>
+
+      <h3 v-if="selectedDay">Sessions for Day {{ selectedDay }}</h3>
+      <div v-for="s in filteredSessions" :key="s.id">
+        {{ s.subject }} - {{ s.duration }} mins
+      </div>
     </div>
   </div>
 </body>
