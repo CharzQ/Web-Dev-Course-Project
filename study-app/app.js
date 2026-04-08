@@ -5,6 +5,7 @@ createApp({
     return {
       currentPage: 'home',
       sessions: [],
+      currentGraph: 'bar',
       newSession: {
         subject: '',
         duration: null,
@@ -27,6 +28,7 @@ createApp({
 
       this.$nextTick(() => {
         updateStudyChart(this.sessions);
+        updateLineChart(this.sessions);
       });
     },
 
