@@ -76,7 +76,7 @@ createApp({
 
     hasSession(day) {
       return this.sessions.some(s => {
-        const d = new Date(s.date);
+        const d = new Date(s.date + "T00:00:00");
 
         return d.getDate() === day && d.getMonth() === this.currentMonth && d.getFullYear() === this.currentYear;
       });
@@ -86,7 +86,7 @@ createApp({
       this.selectedDay = day;
 
       this.filteredSessions = this.sessions.filter(s => {
-        const d = new Date(s.date);
+        const d = new Date(s.date + "T00:00:00");
 
         return d.getDate() === day && d.getMonth() === this.currentMonth && d.getFullYear() === this.currentYear;
       });
