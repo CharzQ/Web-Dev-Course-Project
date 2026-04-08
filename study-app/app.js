@@ -24,6 +24,10 @@ createApp({
     async fetchSessions() {
       const res = await fetch('http://localhost:3000/api/sessions');
       this.sessions = await res.json();
+
+      this.$nextTick(() => {
+        updateStudyChart(this.sessions);
+      });
     },
 
     async addSession() {
