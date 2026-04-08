@@ -17,8 +17,6 @@
 
 4. **Open the frontend**
     - Locate and open `index.html` in your browser
-      OR
-    - Run `index.html`
 
 5. **Use the app**
     - Enter your data parameters  
