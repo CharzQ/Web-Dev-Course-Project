@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <title>Study Tracker</title>
   <script src="https://unpkg.com/vue@3"></script>
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <script src="handle_data.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css">
   <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
   <div id="app">
     <!-- NAVBAR -->
@@ -20,35 +23,41 @@
 
 
     <div v-if="currentPage === 'home'">
-      <h1 id="title">Study Sessions</h1>
-
+      <section class="hero is-success">
+        <div class="hero-body">
+          <p class="title">Study Sessions</p>
+          <p class="subtitle">Add, view and delete sessions here!</p>
+        </div>
+      </section>
       <!-- FORM -->
-      <form @submit.prevent="addSession" id="user_subject_data">
-        <input name="subject" v-model="newSession.subject" placeholder="Subject" required />
-        <input name="duration" v-model.number="newSession.duration" type="number" placeholder="Duration (mins)" required />
-        <input name="productivity" v-model.number="newSession.productivity" type="number" min="1" max="5" placeholder="Productivity (1-5)" required />
-        <input name="date" v-model="newSession.date" type="date" required />
-        <input name="additional_notes" id="additional-notes" type="text" placeholder="Additional Notes">
-        <button id="session-button" type="submit">Add Session</button>
+      <form @submit.prevent="addSession" id="user_subject_data" class="form">
+        <input class="input" name="subject" v-model="newSession.subject" placeholder="Subject" required />
+        <input class="input" name="duration" v-model.number="newSession.duration" type="number" placeholder="Duration (mins)"
+          required />
+        <input class="input" name="productivity" v-model.number="newSession.productivity" type="number" min="1" max="5"
+          placeholder="Productivity (1-5)" required />
+        <input class="input" name="date" v-model="newSession.date" type="date" required />
+        <input class="input"name="additional_notes" id="additional-notes" type="text" placeholder="Additional Notes">
+        <button  class="button" id="session-button" type="submit">Add Session</button>
       </form>
 
       <div id="switch-graphs" style="text-align: center; margin-bottom: 20px;">
-        <button @click="currentGraph = 'bar'">Show Bar Chart</button>
-        <button @click="currentGraph = 'line'">Show Line Chart</button>
-            <button @click="currentGraph = 'pie'">Show Pie Chart</button>
-        
+        <button @click="currentGraph = 'bar'" class="button">Show Bar Chart</button>
+        <button @click="currentGraph = 'line'" class="button">Show Line Chart</button>
+        <button @click="currentGraph = 'pie'" class="button">Show Pie Chart</button>
+
       </div>
-      
+
       <div id="chart-container" v-show="currentGraph === 'bar'"></div>
       <div id="line-chart-container" v-show="currentGraph === 'line'"></div>
-        <div id="pie-chart-container" v-show="currentGraph === 'pie'"></div>
+      <div id="pie-chart-container" v-show="currentGraph === 'pie'"></div>
       <hr />
-      
+
       <!-- DISPLAY SESSIONS -->
       <div v-for="session in sessions" :key="session.id">
         {{ session.subject }} - {{ session.duration }} mins ({{ session.productivity }}/5)
-        
-        <button @click="deleteSession(session.id)">Delete</button>
+
+        <button class="button" @click="deleteSession(session.id)">Delete</button>
       </div>
       <hr />
       <div id="chart-container"></div>
@@ -56,21 +65,27 @@
 
     <!-- Calendar Page -->
     <div v-if="currentPage === 'calendar'">
-      <h1 id="title">Calendar</h1>
+      <section class="hero is-success">
+        <div class="hero-body">
+          <p class="title">Session Calendar</p>
+          <p class="subtitle">View your sessions by date and click to see the scores</p>
+        </div>
+      </section>
       <div class="calendar-header">
-        <button @click="prevMonth">← Prev</button>
-        
-        <span class="month-title">
+        <button class="button" @click="prevMonth">← Prev</button>
+
+        <span class="tag is-success month-title">
           {{ monthName }} {{ currentYear }}
         </span>
-        
-        <button @click="nextMonth">Next →</button>
+
+        <button class="button" @click="nextMonth">Next →</button>
       </div>
 
-      <button class="today-btn" @click="goToToday">Today</button>
+      <button class="button today-btn" @click="goToToday">Today</button>
 
       <div class="calendar">
-        <div v-for="day in days" :key="day" :class="['day', { active: hasSession(day), selected: day === selectedDay}]" @click="selectDay(day)">
+        <div v-for="day in days" :key="day" :class="['day', { active: hasSession(day), selected: day === selectedDay}]"
+          @click="selectDay(day)">
           {{ day }}
         </div>
       </div>
@@ -83,4 +98,5 @@
   </div>
 </body>
 <script src="app.js"></script>
+
 </html>
