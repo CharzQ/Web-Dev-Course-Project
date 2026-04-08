@@ -8,87 +8,65 @@
 <body>
 
 <div id="app">
-  <h1 id="title">Study Sessions</h1>
 
-  <!-- FORM -->
-  <form @submit.prevent="addSession">
-    <input v-model="newSession.subject" placeholder="Subject" required />
-    <input v-model.number="newSession.duration" type="number" placeholder="Duration (mins)" required />
-    <input v-model.number="newSession.productivity" type="number" min="1" max="5" placeholder="Productivity (1-5)" required />
-    <input v-model="newSession.date" type="date" required />
-    <button id="session-button" type="submit">Add Session</button>
-  </form>
-
-  <hr />
-
-  <!-- DISPLAY SESSIONS -->
-  <div v-for="session in sessions" :key="session.id">
-    {{ session.subject }} - {{ session.duration }} mins ({{ session.productivity }}/5)
-
-    <button @click="deleteSession(session.id)">Delete</button>
+  <!-- NAVBAR -->
+  <div class="topnav">
+    <a href="#" @click.prevent="currentPage = 'home'" :class="{ active: currentPage === 'home'}">Home</a>
+    <!-- <a href="#" @click.prevent="currentPage = 'analytics'" :class="{ active: currentPage === 'analytics'}">Analytics</a> -->
+    <!-- <a href="#" @click.prevent="currentPage = 'stats'" :class="{ active: currentPage === 'stats'}">Stats</a> -->
+    <a href="#" @click.prevent="currentPage = 'calendar'" :class="{ active: currentPage === 'calendar'}">Calendar</a>
+    <!-- <a href="#" @click.prevent="currentPage = 'API'" :class="{ active: currentPage === 'API'}">API</a> -->
   </div>
-</div>
 
-<script>
-const { createApp } = Vue;
 
-createApp({
-  data() {
-    return {
-      sessions: [],
-      newSession: {
-        subject: '',
-        duration: null,
-        productivity: null,
-        date: ''
-      }
-    };
-  },
+  <div v-if="currentPage === 'home'">
+    <h1 id="title">Study Sessions</h1>
 
-  methods: {
-    async fetchSessions() {
-      const res = await fetch('http://localhost:3000/api/sessions');
-      this.sessions = await res.json();
-    },
+    <!-- FORM -->
+    <form @submit.prevent="addSession">
+      <input v-model="newSession.subject" placeholder="Subject" required />
+      <input v-model.number="newSession.duration" type="number" placeholder="Duration (mins)" required />
+      <input v-model.number="newSession.productivity" type="number" min="1" max="5" placeholder="Productivity (1-5)" required />
+      <input v-model="newSession.date" type="date" required />
+      <button id="session-button" type="submit">Add Session</button>
+    </form>
 
-    async addSession() {
-      await fetch('http://localhost:3000/api/sessions', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(this.newSession)
-      });
+    <hr />
 
-      // Clear form
-      this.newSession = {
-        subject: '',
-        duration: null,
-        productivity: null,
-        date: ''
-      };
+    <!-- DISPLAY SESSIONS -->
+    <div v-for="session in sessions" :key="session.id">
+      {{ session.subject }} - {{ session.duration }} mins ({{ session.productivity }}/5)
 
-      // Refresh list
-      this.fetchSessions();
-    },
+      <button @click="deleteSession(session.id)">Delete</button>
+    </div>
+  </div>
 
-    async deleteSession(id) {
-      try {
-        await fetch(`http://localhost:3000/api/sessions/${id}`, {
-        method: 'DELETE',
-      });
+  <!-- Calendar Page -->
+  <div v-if="currentPage === 'calendar'">
+    <h1 id="title">Calendar</h1>
+    <div class="calendar-header">
+      <button @click="prevMonth">← Prev</button>
+      
+      <span class="month-title">
+        {{ monthName }} {{ currentYear }}
+      </span>
+      
+      <button @click="nextMonth">Next →</button>
+    </div>
 
-      // Refresh list after deletion
-      this.fetchSessions();
-      } catch(err) {
-        console.error("Delete failed:", err);
-      }
-    }
-  },
+    <button class="today-btn" @click="goToToday">Today</button>
 
-  mounted() {
-    this.fetchSessions();
-  }
-}).mount('#app');
-</script>
+    <div class="calendar">
+      <div v-for="day in days" :key="day" :class="['day', { active: hasSession(day), selected: day === selectedDay}]" @click="selectDay(day)">
+        {{ day }}
+      </div>
+    </div>
 
+    <h3 v-if="selectedDay">Sessions for Day {{ selectedDay }}</h3>
+    <div v-for="s in filteredSessions" :key="s.id">
+      {{ s.subject }} - {{ s.duration }} mins
+    </div>
+  </div>
 </body>
+<script src="app.js"></script>
 </html>
