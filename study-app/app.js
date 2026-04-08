@@ -29,6 +29,7 @@ createApp({
       this.$nextTick(() => {
         updateStudyChart(this.sessions);
         updateLineChart(this.sessions);
+        updatePieChart(this.sessions);
       });
     },
 

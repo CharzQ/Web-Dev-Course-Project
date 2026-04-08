@@ -35,10 +35,13 @@
       <div id="switch-graphs" style="text-align: center; margin-bottom: 20px;">
         <button @click="currentGraph = 'bar'">Show Bar Chart</button>
         <button @click="currentGraph = 'line'">Show Line Chart</button>
+            <button @click="currentGraph = 'pie'">Show Pie Chart</button>
+        
       </div>
       
       <div id="chart-container" v-show="currentGraph === 'bar'"></div>
       <div id="line-chart-container" v-show="currentGraph === 'line'"></div>
+        <div id="pie-chart-container" v-show="currentGraph === 'pie'"></div>
       <hr />
       
       <!-- DISPLAY SESSIONS -->

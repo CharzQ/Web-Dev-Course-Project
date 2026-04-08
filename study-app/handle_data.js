@@ -103,3 +103,49 @@ function updateLineChart(data) {
         .y(d => y(d.value))
     );
 }
+
+function updatePieChart(data) {
+    d3.select("#pie-chart-container").selectAll("*").remove();
+    if (!data || data.length === 0) {
+        return;
+    }
+
+    const rolledUp = d3.rollup(data,
+        v => d3.sum(v, d => +d.duration),
+        d => d.subject
+    );
+
+    const pieData = Array.from(rolledUp, ([name, value]) => ({name, value}));
+
+    const radius = Math.min(width, height) / 2;
+
+    const svg = d3.select("#pie-chart-container")
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", `translate(${(width / 2) + margin.left}, ${(height / 2) + margin.top})`);
+
+        const color = d3.scaleOrdinal(d3.schemePurples[9]);
+        const pie = d3.pie().value(d => d.value);
+        const arc = d3.arc().innerRadius(0).outerRadius(radius);
+
+        svg.selectAll('slices')
+            .data(pie(pieData))
+            .enter()
+            .append("path")
+            .attr('d', arc)
+            .attr("fill", d => color(d.data.name))
+            .attr("stroke", "white")
+            .style("stroke-width", "2px");
+
+        svg.selectAll("labels")
+            .data(pie(pieData))
+            .enter()
+            .append("text")
+            .text(d => d.data.name)
+            .attr("transform", d => `translate(${arc.centroid(d)})`)
+            .style("text-anchor", "middle")
+            .style("font-size", "12px")
+            .style("fill", "white");
+}
