@@ -126,7 +126,7 @@ function updatePieChart(data) {
         .append("g")
         .attr("transform", `translate(${(width / 2) + margin.left}, ${(height / 2) + margin.top})`);
 
-        const color = d3.scaleOrdinal(d3.schemePurples[9]);
+        const color = d3.scaleOrdinal(d3.schemePurples[9].slice(5)); // remove the lightest colors
         const pie = d3.pie().value(d => d.value);
         const arc = d3.arc().innerRadius(0).outerRadius(radius);
 
@@ -138,6 +138,7 @@ function updatePieChart(data) {
             .attr("fill", d => color(d.data.name))
             .attr("stroke", "white")
             .style("stroke-width", "2px");
+            
 
         svg.selectAll("labels")
             .data(pie(pieData))
@@ -147,5 +148,13 @@ function updatePieChart(data) {
             .attr("transform", d => `translate(${arc.centroid(d)})`)
             .style("text-anchor", "middle")
             .style("font-size", "12px")
-            .style("fill", "white");
+            .style("fill", "#000");
+
+        svg.selectAll("path")
+            .on("mouseover", function () {
+                d3.select(this).attr("opacity", 0.7);
+            })
+            .on("mouseout", function () {
+                d3.select(this).attr("opacity", 1);
+            });
 }
