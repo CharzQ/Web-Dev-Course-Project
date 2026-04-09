@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <title>Study Tracker</title>
   <script src="https://unpkg.com/vue@3"></script>
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <script src="handle_data.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css">
   <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
   <div id="app">
     <!-- Navbar -->
@@ -29,6 +32,12 @@
     <!-- Dashboard -->
     <div v-if="currentPage === 'home'" class="dashboard">
 
+      <section class="hero is-success">
+        <div class="hero-body">
+          <p class="title">Study Sessions</p>
+          <p class="subtitle">Add, view and delete sessions here!</p>
+        </div>
+      </section>
       <h1 class="dashboard-title">Dashboard</h1>
 
       <!-- Overview -->
@@ -95,21 +104,27 @@
 
     <!-- Calendar Page -->
     <div v-if="currentPage === 'calendar'">
-      <h1 id="title">Calendar</h1>
+      <section class="hero is-success">
+        <div class="hero-body">
+          <p class="title">Session Calendar</p>
+          <p class="subtitle">View your sessions by date and click to see the scores</p>
+        </div>
+      </section>
       <div class="calendar-header">
-        <button @click="prevMonth">← Prev</button>
-        
-        <span class="month-title">
+        <button class="button" @click="prevMonth">← Prev</button>
+
+        <span class="tag is-success month-title">
           {{ monthName }} {{ currentYear }}
         </span>
-        
-        <button @click="nextMonth">Next →</button>
+
+        <button class="button" @click="nextMonth">Next →</button>
       </div>
 
-      <button class="today-btn" @click="goToToday">Today</button>
+      <button class="button today-btn" @click="goToToday">Today</button>
 
       <div class="calendar">
-        <div v-for="day in days" :key="day" :class="['day', { active: hasSession(day), selected: day === selectedDay}]" @click="selectDay(day)">
+        <div v-for="day in days" :key="day" :class="['day', { active: hasSession(day), selected: day === selectedDay}]"
+          @click="selectDay(day)">
           {{ day }}
         </div>
       </div>
@@ -139,4 +154,5 @@
   </div>
 </body>
 <script src="app.js"></script>
+
 </html>

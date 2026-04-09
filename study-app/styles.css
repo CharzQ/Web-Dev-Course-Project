@@ -7,17 +7,18 @@ form {
     gap: 16px;
 }
 
-form > input {
-    color: #101828;
-    box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05);
+form>.input {
+    color: #161515;
+    background-color: white;
+    box-shadow: 0px 1px 2px rgba(225, 227, 230, 0.05);
 }
 
-form > input:focus {
+form>.input:focus {
     border-color: #7f56d9;
     box-shadow: 0px 0px 0px 4px rgba(158, 119, 237, 0.24);
 }
 
-form > input::placeholder {
+form>.input::placeholder {
     color: #667085;
     opacity: 0.8;
 }
@@ -29,14 +30,15 @@ form > input::placeholder {
     line-height: 1;
     letter-spacing: -0.035rem;
     font-weight: 400;
-    font-variation-settings: "wdth" 96,"wght" 400;
+    font-variation-settings: "wdth" 96, "wght" 400;
 }
 
 #session-button {
     font: inherit;
     font-weight: 600;
     cursor: pointer;
-    background-color: #7f56d9; /* Match your focus color */
+    background-color: #23d160;
+    /* Match your focus color */
     color: white;
     border: none;
     padding: 12px 18px;
@@ -47,7 +49,7 @@ form > input::placeholder {
 }
 
 #session-button:hover {
-    background-color: #6941c6;
+    background-color: #35c665;
 }
 
 #session-button:active {
@@ -57,7 +59,7 @@ form > input::placeholder {
 
 /* Navbar style */
 .topnav {
-    background-color: #333;
+    background-color: #48c78e;
     overflow: hidden;
     display: flex;
     justify-content: space-between;
@@ -75,12 +77,12 @@ form > input::placeholder {
 }
 
 .topnav a:hover {
-    background-color: #9e91bd;
-    color: black;
+    background-color: #094605;
+    color: whi;
 }
 
 .topnav a.active {
-    background-color: #6941c6;
+    background-color: #48c78e;
     color: white;
 }
 
@@ -94,39 +96,44 @@ form > input::placeholder {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     gap: 10px;
+    margin-inline: 20px;
 }
 
 .day {
-    border: 1px solid #ccc;
+    border: 1px solid white;
     padding: 10px;
     min-height: 80px;
+    color: white
 }
 
 .day:hover {
-    background-color: #e0d6f7;
+    background-color: #48c78e;
 }
 
 .calendar-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
 }
 
 .month-title {
-  font-weight: bold;
-  font-size: 18px;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
 }
 
 .active {
-  background-color: #bff7bb;
+    background-color: #48c78e;
 }
 
 .selected {
-  border: 2px solid #6941c6;
-  background-color: #dcd6f7;
+/*   border: 2px solid #6941c6;
+  background-color: #dcd6f7; */
+  border: 2px solid #48c78e;
+  background-color: white;
+  color: black;
 }
-
 
 /* Dashboard style */
 .dashboard {
