@@ -40,7 +40,6 @@ createApp({
         body: JSON.stringify(this.newSession)
       });
 
-      // Clear form
       this.newSession = {
         subject: '',
         duration: null,
@@ -48,8 +47,10 @@ createApp({
         date: ''
       };
 
-      // Refresh list
-      this.fetchSessions();
+      await this.fetchSessions();
+
+      // Return to dashboard
+      this.currentPage = 'home';
     },
 
     async deleteSession(id) {
@@ -132,6 +133,13 @@ createApp({
         this.fetchSessions();
         this.generateCalendar();
       }
+      if (newPage === 'home') {
+        this.$nextTick(() => {
+          updateStudyChart(this.sessions);
+          updateLineChart(this.sessions);
+          updatePieChart(this.sessions);
+        });
+      }
     }
   },
 
@@ -143,6 +151,35 @@ createApp({
         "September", "October", "November", "December"
       ];
       return months[this.currentMonth];
+    },
+    weeklyData() {
+      const now = new Date();
+      now.setHours(0, 0, 0, 0);
+      
+      const weekAgo = new Date();
+      weekAgo.setDate(now.getDate() - 6);
+
+      return this.sessions.filter(s => {
+        const d = new Date(s.date);
+        d.setHours(0, 0, 0, 0);
+        return d >= weekAgo && d <= now;
+      });
+    },
+
+    weeklyTime() {
+      return this.weeklyData.reduce((sum, s) => sum + Number(s.duration || 0), 0);
+    },
+
+    weeklySessions() {
+      return this.weeklyData.length;
+    },
+
+    weeklyProductivity() {
+      if (this.weeklyData.length === 0) return 0;
+      return (
+        this.weeklyData.reduce((sum, s) => sum + Number(s.productivity || 0), 0)
+        / this.weeklyData.length
+      ).toFixed(1);
     }
   },
 
