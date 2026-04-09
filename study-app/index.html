@@ -31,13 +31,6 @@
 
     <!-- Dashboard -->
     <div v-if="currentPage === 'home'" class="dashboard">
-
-      <section class="hero is-success">
-        <div class="hero-body">
-          <p class="title">Study Sessions</p>
-          <p class="subtitle">Add, view and delete sessions here!</p>
-        </div>
-      </section>
       <h1 class="dashboard-title">Dashboard</h1>
 
       <!-- Overview -->
@@ -137,7 +130,12 @@
 
     <!-- Create Session Page -->
     <div v-if="currentPage === 'create'">
-      <h1 id="title">Add Study Session</h1>
+       <section class="hero is-success">
+        <div class="hero-body">
+          <p class="title">Study Sessions</p>
+          <p class="subtitle">Add, view and delete sessions here!</p>
+        </div>
+      </section>
 
       <!-- FORM -->
       <form @submit.prevent="addSession" id="user_subject_data">
