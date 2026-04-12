@@ -152,8 +152,34 @@ createApp({
           $('#studyPlanNotification').remove();
         });
       }
-
-    }
+    },
+    async refineStudyPlan() {
+      const res = await fetch('http://localhost:3000/api/refineStudyPlan', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt: this.prompt, studyGuide: this.studyPlan })
+      });
+      this.studyPlan = await res.json();
+      this.updateCurrentStudyPlan();
+      this.currentPage = 'generateStudyPlan';
+    },
+    updateCurrentStudyPlan() {
+      const currentStudyPlan = $('#currentStudyPlan');
+      console.log("update", currentStudyPlan.length)
+      if ($(currentStudyPlan).length === 1) {
+        console.log("update 2", this.studyPlan)
+        $(currentStudyPlan).empty();
+        currentStudyPlan.append(`<div class='panel-heading'>Study Plan</div>`);
+        //Needed to replace the \n with <br> to make it display properly
+        currentStudyPlan.append(`<div class='panel-block'>${this.studyPlan.replaceAll(/\n/g, '<br>')}</div > `);
+      } else {
+        console.log("Notify doesn't exist")
+        $('#genratePlan').append(`<div id='studyPlanNotification' class='notification is-warning'><button class='delete'></button>Study Plan Does not exist use the generate button to create one and then refine.<div>`);
+        $('#studyPlanNotification .delete').on('click', function () {
+          $('#studyPlanNotification').remove();
+        });
+      }
+    },
   },
 
   watch: {

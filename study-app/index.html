@@ -164,7 +164,8 @@
       </section>
       <form @submit.prevent="generateStudyPlan" id="study-plan-form">
         <input class="input" name="prompt" v-model="prompt" placeholder="Subject" required />
-        <button class="button" id="study-plan-button" type="submit">Generate Study Plan</button>
+        <button class="button" type="submit">Generate Study Plan</button>
+        <button class="button" @click="refineStudyPlan()">Refine Study Plan</button>
       </form>
     </div>
   </div>
