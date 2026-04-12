@@ -17,6 +17,8 @@ createApp({
       filteredSessions: [],
       currentMonth: new Date().getMonth(),
       currentYear: new Date().getFullYear(),
+      studyPlan: '',
+      prompt: ''
     };
   },
 
@@ -53,15 +55,16 @@ createApp({
       this.currentPage = 'home';
     },
 
+
     async deleteSession(id) {
       try {
         await fetch(`http://localhost:3000/api/sessions/${id}`, {
-        method: 'DELETE',
-      });
+          method: 'DELETE',
+        });
 
-      // Refresh list after deletion
-      this.fetchSessions();
-      } catch(err) {
+        // Refresh list after deletion
+        this.fetchSessions();
+      } catch (err) {
         console.error("Delete failed:", err);
       }
     },
@@ -122,6 +125,34 @@ createApp({
 
       this.generateCalendar();
       this.selectDay(this.selectedDay);
+    },
+    async generateStudyPlan() {
+      const res = await fetch('http://localhost:3000/api/generateStudyPlan', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt: this.prompt })
+      });
+      this.studyPlan = await res.json();
+      console.log(this.studyPlan)
+      this.createCurrentStudyPlan();
+      this.currentPage = 'generateStudyPlan';
+    },
+    createCurrentStudyPlan() {
+      const studyPlanDisplay = $('#genratePlan');
+      if ($(studyPlanDisplay).find('#currentStudyPlan').length === 0) {
+        $(studyPlanDisplay).append(`<div id='currentStudyPlan' class= 'panel is-scrollable'></div>`);
+        const currentStudyPlan = $('#currentStudyPlan');
+        currentStudyPlan.append(`<div class='panel-heading'>Study Plan</div>`);
+        //Needed to replace the \n with <br> to make it display properly
+        currentStudyPlan.append(`<div class='panel-block'>${this.studyPlan.replaceAll(/\n/g, '<br>')}</div > `);
+      } else {
+        console.log("Notify")
+        let $notification = $('#currentStudyPlan').before(`<div id='studyPlanNotification' class='notification is-info'><button class='delete'></button>Study Plan Has already been created please use the refine button to make changes to the study plan.<div>`);
+        $('#studyPlanNotification .delete').on('click', function () {
+          $('#studyPlanNotification').remove();
+        });
+      }
+
     }
   },
 
@@ -155,7 +186,7 @@ createApp({
     weeklyData() {
       const now = new Date();
       now.setHours(0, 0, 0, 0);
-      
+
       const weekAgo = new Date();
       weekAgo.setDate(now.getDate() - 6);
 
